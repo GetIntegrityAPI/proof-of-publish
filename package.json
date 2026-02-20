@@ -1,0 +1,11 @@
+{
+  "name": "getintegrity-proof-of-publish",
+  "version": "1.0.0",
+  "description": "GitHub Action for generating verifiable publish receipts",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "axios": "^1.6.0"
+  }
+}

@@ -1,0 +1,17 @@
+name: "GetIntegrityAPI Proof of Publish"
+description: "Generate a verifiable publish receipt for CI/CD releases"
+
+inputs:
+  api_key:
+    description: "GetIntegrityAPI API key"
+    required: true
+
+outputs:
+  proof_id:
+    description: "Generated proof ID"
+  receipt_url:
+    description: "Public verification URL"
+
+runs:
+  using: "node20"
+  main: "index.js"
