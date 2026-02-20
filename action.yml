@@ -13,5 +13,14 @@ outputs:
     description: "Public verification URL"
 
 runs:
-  using: "node20"
-  main: "index.js"
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      run: npm install
+      shell: bash
+
+    - name: Run publish proof
+      run: node index.js
+      shell: bash
+      env:
+        GI_API_KEY: ${{ inputs.api_key }}

@@ -1,13 +1,12 @@
-import * as core from "@actions/core";
 import axios from "axios";
 
 async function run() {
   try {
-    const apiKey = core.getInput("api_key");
+    const apiKey = process.env.GI_API_KEY;
 
     if (!apiKey) {
-      core.setFailed("api_key input is required");
-      return;
+      console.error("GI_API_KEY is required");
+      process.exit(1);
     }
 
     const response = await axios.post(
@@ -30,9 +29,6 @@ async function run() {
     const proofId = response.data.proof_id;
     const receiptUrl = `https://api.getintegrityapi.com/verify/${proofId}`;
 
-    core.setOutput("proof_id", proofId);
-    core.setOutput("receipt_url", receiptUrl);
-
     console.log(`Proof ID: ${proofId}`);
     console.log(`Receipt URL: ${receiptUrl}`);
 
@@ -42,7 +38,8 @@ async function run() {
       error.response?.data?.message ||
       error.message;
 
-    core.setFailed(message);
+    console.error(message);
+    process.exit(1);
   }
 }
 
