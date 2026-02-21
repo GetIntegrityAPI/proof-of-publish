@@ -26,3 +26,4 @@ runs:
       working-directory: ${{ github.action_path }}
       env:
         GI_API_KEY: ${{ inputs.api_key }}
+        GITHUB_WORKSPACE: ${{ github.workspace }}
