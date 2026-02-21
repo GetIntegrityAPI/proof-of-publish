@@ -1,6 +1,7 @@
 import axios from "axios";
 import fs from "fs";
 import crypto from "crypto";
+import path from "path";
 
 async function run() {
   try {
@@ -11,6 +12,8 @@ async function run() {
       process.exit(1);
     }
 
+    const workspace = process.env.GITHUB_WORKSPACE || process.cwd();
+
     const payload = {
       event: "github_publish",
       repository: process.env.GITHUB_REPOSITORY,
@@ -19,6 +22,7 @@ async function run() {
       run_id: process.env.GITHUB_RUN_ID,
       run_number: process.env.GITHUB_RUN_NUMBER,
       workflow: process.env.GITHUB_WORKFLOW,
+      ref: process.env.GITHUB_REF,
       timestamp: new Date().toISOString()
     };
 
@@ -34,10 +38,13 @@ async function run() {
       }
     );
 
+    if (!response.data || !response.data.proof_id) {
+      throw new Error("Invalid response from proof endpoint");
+    }
+
     const proofId = response.data.proof_id;
     const receiptUrl = `https://api.getintegrityapi.com/verify/${proofId}`;
 
-    // Construct full receipt object (offline-verifiable artifact)
     const receipt = {
       receipt_version: "1",
       proof_id: proofId,
@@ -49,26 +56,35 @@ async function run() {
         actor: process.env.GITHUB_ACTOR,
         run_id: process.env.GITHUB_RUN_ID,
         run_number: process.env.GITHUB_RUN_NUMBER,
-        workflow: process.env.GITHUB_WORKFLOW
+        workflow: process.env.GITHUB_WORKFLOW,
+        ref: process.env.GITHUB_REF
       },
       proof_response: response.data
     };
 
-    // Write receipt.json
-    fs.writeFileSync("receipt.json", JSON.stringify(receipt, null, 2));
+    const receiptPath = path.join(workspace, "receipt.json");
+    const hashPath = path.join(workspace, "receipt.sha256");
 
-    // Generate SHA256 digest of receipt for tamper detection
-    const receiptBuffer = fs.readFileSync("receipt.json");
+    // Write receipt.json
+    fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2));
+
+    // Generate SHA256 digest
+    const receiptBuffer = fs.readFileSync(receiptPath);
     const receiptHash = crypto
       .createHash("sha256")
       .update(receiptBuffer)
       .digest("hex");
 
-    fs.writeFileSync("receipt.sha256", receiptHash);
+    fs.writeFileSync(hashPath, receiptHash);
 
     console.log("Proof ID:", proofId);
     console.log("Receipt URL:", receiptUrl);
     console.log("Receipt SHA256:", receiptHash);
+
+    // GitHub Actions outputs (for downstream steps if needed)
+    console.log(`::set-output name=proof_id::${proofId}`);
+    console.log(`::set-output name=receipt_url::${receiptUrl}`);
+    console.log(`::set-output name=receipt_sha256::${receiptHash}`);
 
   } catch (error) {
     const message =
