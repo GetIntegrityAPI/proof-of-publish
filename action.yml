@@ -5,30 +5,33 @@ inputs:
   api_key:
     description: "GetIntegrityAPI API key"
     required: true
-  workspace:
-    description: "GitHub workspace path"
-    required: true
 
 outputs:
   proof_id:
     description: "Generated proof ID"
+    value: ${{ steps.publish.outputs.proof_id }}
   receipt_url:
     description: "Public verification URL"
+    value: ${{ steps.publish.outputs.receipt_url }}
   receipt_sha256:
-    description: "SHA256 hash of receipt"
+    description: "SHA256 of receipt.json"
+    value: ${{ steps.publish.outputs.receipt_sha256 }}
+  receipt_pdf_path:
+    description: "Path to generated receipt.pdf"
+    value: ${{ steps.publish.outputs.receipt_pdf_path }}
 
 runs:
   using: "composite"
   steps:
     - name: Install dependencies
-      run: npm install
       shell: bash
       working-directory: ${{ github.action_path }}
+      run: npm ci || npm install
 
     - name: Run publish proof
-      run: node index.js
+      id: publish
       shell: bash
       working-directory: ${{ github.action_path }}
       env:
         GI_API_KEY: ${{ inputs.api_key }}
-        GI_WORKSPACE: ${{ inputs.workspace }}
+      run: node index.js
