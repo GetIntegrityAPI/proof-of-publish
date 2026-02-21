@@ -12,7 +12,15 @@ async function run() {
       process.exit(1);
     }
 
-    const workspace = process.env.GITHUB_WORKSPACE || process.cwd();
+    const actionDir = process.cwd();
+    const workspace = process.env.GITHUB_WORKSPACE;
+
+    console.log("Action directory:", actionDir);
+    console.log("Workspace env:", workspace);
+
+    if (!workspace) {
+      throw new Error("GITHUB_WORKSPACE is not defined.");
+    }
 
     const payload = {
       event: "github_publish",
@@ -62,29 +70,55 @@ async function run() {
       proof_response: response.data
     };
 
-    const receiptPath = path.join(workspace, "receipt.json");
-    const hashPath = path.join(workspace, "receipt.sha256");
+    // Paths inside action directory
+    const localReceiptPath = path.join(actionDir, "receipt.json");
+    const localHashPath = path.join(actionDir, "receipt.sha256");
 
-    // Write receipt.json
-    fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2));
+    // Write locally first
+    fs.writeFileSync(localReceiptPath, JSON.stringify(receipt, null, 2));
 
-    // Generate SHA256 digest
-    const receiptBuffer = fs.readFileSync(receiptPath);
+    const receiptBuffer = fs.readFileSync(localReceiptPath);
     const receiptHash = crypto
       .createHash("sha256")
       .update(receiptBuffer)
       .digest("hex");
 
-    fs.writeFileSync(hashPath, receiptHash);
+    fs.writeFileSync(localHashPath, receiptHash);
+
+    console.log("Local receipt written:", localReceiptPath);
+    console.log("Local hash written:", localHashPath);
+
+    // Copy to workspace root
+    const workspaceReceiptPath = path.join(workspace, "receipt.json");
+    const workspaceHashPath = path.join(workspace, "receipt.sha256");
+
+    fs.copyFileSync(localReceiptPath, workspaceReceiptPath);
+    fs.copyFileSync(localHashPath, workspaceHashPath);
+
+    console.log("Copied to workspace:");
+    console.log("Receipt:", workspaceReceiptPath);
+    console.log("SHA256:", workspaceHashPath);
+
+    // Final existence check
+    if (!fs.existsSync(workspaceReceiptPath)) {
+      throw new Error("receipt.json not found in workspace after copy.");
+    }
+
+    if (!fs.existsSync(workspaceHashPath)) {
+      throw new Error("receipt.sha256 not found in workspace after copy.");
+    }
 
     console.log("Proof ID:", proofId);
     console.log("Receipt URL:", receiptUrl);
     console.log("Receipt SHA256:", receiptHash);
 
-    // GitHub Actions outputs (for downstream steps if needed)
-    console.log(`::set-output name=proof_id::${proofId}`);
-    console.log(`::set-output name=receipt_url::${receiptUrl}`);
-    console.log(`::set-output name=receipt_sha256::${receiptHash}`);
+    // Modern GitHub output method
+    if (process.env.GITHUB_OUTPUT) {
+      fs.appendFileSync(
+        process.env.GITHUB_OUTPUT,
+        `proof_id=${proofId}\nreceipt_url=${receiptUrl}\nreceipt_sha256=${receiptHash}\n`
+      );
+    }
 
   } catch (error) {
     const message =
