@@ -5,12 +5,17 @@ inputs:
   api_key:
     description: "GetIntegrityAPI API key"
     required: true
+  workspace:
+    description: "GitHub workspace path"
+    required: true
 
 outputs:
   proof_id:
     description: "Generated proof ID"
   receipt_url:
     description: "Public verification URL"
+  receipt_sha256:
+    description: "SHA256 hash of receipt"
 
 runs:
   using: "composite"
@@ -26,4 +31,4 @@ runs:
       working-directory: ${{ github.action_path }}
       env:
         GI_API_KEY: ${{ inputs.api_key }}
-        GITHUB_WORKSPACE: ${{ github.workspace }}
+        GI_WORKSPACE: ${{ inputs.workspace }}
