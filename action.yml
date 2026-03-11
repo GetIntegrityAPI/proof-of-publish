@@ -1,34 +1,43 @@
 name: "GetIntegrityAPI Proof of Publish"
-description: "Generate a verifiable publish receipt for CI/CD releases"
+
+description: "Generate cryptographically verifiable publish receipts for CI/CD releases using the GetIntegrity tamper-evident ledger."
+
+branding:
+  icon: "shield"
+  color: "blue"
 
 inputs:
   api_key:
-    description: "GetIntegrityAPI API key"
+    description: "GetIntegrityAPI scoped API key"
     required: true
 
 outputs:
   proof_id:
-    description: "Generated proof ID"
+    description: "Generated proof capsule ID"
     value: ${{ steps.publish.outputs.proof_id }}
+
   receipt_url:
     description: "Public verification URL"
     value: ${{ steps.publish.outputs.receipt_url }}
+
   receipt_sha256:
-    description: "SHA256 of receipt.json"
+    description: "SHA256 of receipt.json (for offline verification)"
     value: ${{ steps.publish.outputs.receipt_sha256 }}
+
   receipt_pdf_path:
     description: "Path to generated receipt.pdf"
     value: ${{ steps.publish.outputs.receipt_pdf_path }}
 
 runs:
   using: "composite"
+
   steps:
     - name: Install dependencies
       shell: bash
       working-directory: ${{ github.action_path }}
       run: npm ci || npm install
 
-    - name: Run publish proof
+    - name: Generate Publish Proof
       id: publish
       shell: bash
       working-directory: ${{ github.action_path }}
