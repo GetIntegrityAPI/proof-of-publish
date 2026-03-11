@@ -1,8 +1,12 @@
 {
-  "name": "proof-of-publish",
+  "name": "@getintegrityapi/proof-of-publish",
   "version": "1.0.0",
+  "description": "GitHub Action for generating cryptographically verifiable CI/CD publish receipts using GetIntegrityAPI.",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "axios": "^1.6.0",
     "pdfkit": "^0.14.0"
