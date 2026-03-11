@@ -6,6 +6,10 @@
 
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Action-blue)](https://github.com/marketplace)
 
+**Category:** CI/CD Security • Release Integrity • Supply Chain Verification
+
+---
+
 Generate a **cryptographically verifiable publish receipt** for every CI/CD release.
 
 Each pipeline run produces a **signed proof capsule anchored in the GetIntegrity tamper-evident ledger**, enabling independent verification of software releases, artifacts, and deployment events.
