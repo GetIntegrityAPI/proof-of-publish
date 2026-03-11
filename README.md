@@ -1,8 +1,10 @@
 # GetIntegrityAPI Proof of Publish Action
 
 [![GitHub release](https://img.shields.io/github/v/release/GetIntegrityAPI/proof-of-publish)](https://github.com/GetIntegrityAPI/proof-of-publish/releases)
-[![License](https://img.shields.io/github/license/GetIntegrityAPI/proof-of-publish)](LICENSE)
-[![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Action-blue)](https://github.com/marketplace/actions)
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+[![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Action-blue)](https://github.com/marketplace)
 
 Generate a **cryptographically verifiable publish receipt** for every CI/CD release.
 
