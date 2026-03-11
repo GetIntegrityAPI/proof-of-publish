@@ -1,1 +1,15 @@
+# Node dependencies
 node_modules/
+
+# Logs
+npm-debug.log*
+*.log
+
+# Local test artifacts
+receipt.json
+receipt.sha256
+receipt.pdf
+
+# OS files
+.DS_Store
+Thumbs.db
