@@ -1,4 +1,3 @@
-```yaml
 name: Publish Receipt
 
 on:
@@ -37,4 +36,4 @@ jobs:
           echo "**Receipt SHA256:** ${{ steps.publish.outputs.receipt_sha256 }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Receipt PDF Path:** ${{ steps.publish.outputs.receipt_pdf_path }}" >> $GITHUB_STEP_SUMMARY
-```
+          
