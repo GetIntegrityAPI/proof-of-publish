@@ -1,0 +1,40 @@
+```yaml
+name: Publish Receipt
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish-proof:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Publish Receipt
+        id: publish
+        uses: GetIntegrityAPI/proof-of-publish@v1
+        with:
+          api_key: ${{ secrets.GI_API_KEY }}
+
+      - name: Show Verification Receipt
+        run: |
+          echo "Proof ID: ${{ steps.publish.outputs.proof_id }}"
+          echo "Verification URL: ${{ steps.publish.outputs.receipt_url }}"
+          echo "Receipt SHA256: ${{ steps.publish.outputs.receipt_sha256 }}"
+          echo "Receipt PDF Path: ${{ steps.publish.outputs.receipt_pdf_path }}"
+
+      - name: Publish Verification Summary
+        run: |
+          echo "## GetIntegrity Publish Receipt" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Proof ID:** ${{ steps.publish.outputs.proof_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Verification URL:** ${{ steps.publish.outputs.receipt_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Receipt SHA256:** ${{ steps.publish.outputs.receipt_sha256 }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Receipt PDF Path:** ${{ steps.publish.outputs.receipt_pdf_path }}" >> $GITHUB_STEP_SUMMARY
+```
