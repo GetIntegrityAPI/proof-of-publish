@@ -5,6 +5,9 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   publish-proof:
     runs-on: ubuntu-latest
@@ -39,7 +42,7 @@ jobs:
           ls -l receipt.json receipt.sha256 "${{ steps.publish.outputs.receipt_pdf_path }}"
 
       - name: Upload publish receipt artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: publish-receipt-${{ github.run_id }}
           if-no-files-found: error
