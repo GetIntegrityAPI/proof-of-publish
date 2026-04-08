@@ -19,13 +19,37 @@ jobs:
           api_key: ${{ secrets.GI_API_KEY }}
 
       - name: Show Verification Receipt
+        shell: bash
         run: |
           echo "Proof ID: ${{ steps.publish.outputs.proof_id }}"
           echo "Verification URL: ${{ steps.publish.outputs.receipt_url }}"
           echo "Receipt SHA256: ${{ steps.publish.outputs.receipt_sha256 }}"
           echo "Receipt PDF Path: ${{ steps.publish.outputs.receipt_pdf_path }}"
 
+      - name: Verify generated files exist
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f receipt.json
+          test -f receipt.sha256
+          test -f "${{ steps.publish.outputs.receipt_pdf_path }}"
+
+          echo "Verified files:"
+          ls -l receipt.json receipt.sha256 "${{ steps.publish.outputs.receipt_pdf_path }}"
+
+      - name: Upload publish receipt artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-receipt-${{ github.run_id }}
+          if-no-files-found: error
+          path: |
+            receipt.json
+            receipt.sha256
+            ${{ steps.publish.outputs.receipt_pdf_path }}
+
       - name: Publish Verification Summary
+        shell: bash
         run: |
           echo "## GetIntegrity Publish Receipt" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -36,4 +60,5 @@ jobs:
           echo "**Receipt SHA256:** ${{ steps.publish.outputs.receipt_sha256 }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Receipt PDF Path:** ${{ steps.publish.outputs.receipt_pdf_path }}" >> $GITHUB_STEP_SUMMARY
-          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifact Bundle:** publish-receipt-${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
