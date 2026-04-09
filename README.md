@@ -10,7 +10,7 @@
 
 Generate a public verification URL, signed publish proof, SHA-256 integrity digest, and audit-ready receipt artifacts for every CI/CD release.
 
-Each workflow run produces a signed proof capsule anchored in the GetIntegrity tamper-evident ledger, enabling independent verification of software releases, build events, and deployment activity.
+Each workflow run produces a signed proof capsule anchored in the GetIntegrityAPI tamper-evident ledger, enabling independent verification of software releases, build events, and deployment activity.
 
 This Action is designed for DevOps, DevSecOps, platform, and security teams that need verifiable release evidence without operating validator infrastructure or adding heavyweight supply-chain tooling.
 
@@ -161,7 +161,7 @@ jobs:
       - name: Publish Verification Summary
         shell: bash
         run: |
-          echo "## GetIntegrity Publish Receipt" >> $GITHUB_STEP_SUMMARY
+          echo "## GetIntegrityAPI Publish Receipt" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Proof ID:** ${{ steps.publish.outputs.proof_id }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -272,7 +272,7 @@ This supports independent verification workflows without relying solely on the U
 
 ## Public Key Endpoints
 
-GetIntegrity publishes verification key material for independent proof verification.
+GetIntegrityAPI publishes verification key material for independent proof verification.
 
 ```text
 https://api.getintegrityapi.com/.well-known/hp-public-key
