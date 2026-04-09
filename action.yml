@@ -1,6 +1,6 @@
 name: "GetIntegrityAPI Proof of Publish"
 
-description: "Generate cryptographically verifiable publish receipts for CI/CD releases using the GetIntegrity tamper-evident ledger."
+description: "Generate cryptographically verifiable publish receipts for CI/CD releases using the GetIntegrityAPI tamper-evident ledger."
 
 branding:
   icon: "shield"
