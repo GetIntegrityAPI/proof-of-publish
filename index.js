@@ -166,7 +166,7 @@ async function run() {
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          "User-Agent": "getintegrity-github-action",
+          "User-Agent": "getintegrityapi-github-action",
         },
         timeout: 15000,
       }
