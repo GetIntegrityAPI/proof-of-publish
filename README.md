@@ -61,7 +61,7 @@ Each run generates the following files:
 receipt.json
 receipt.sha256
 receipt.pdf
-````
+```
 
 | Artifact         | Purpose                                                           |
 | ---------------- | ----------------------------------------------------------------- |
@@ -71,13 +71,25 @@ receipt.pdf
 
 These files are intended to be preserved as **GitHub Actions artifacts** or stored alongside:
 
-* release artifacts
-* deployment records
-* compliance documentation
-* audit evidence packages
-* supply-chain security archives
+- release artifacts
+- deployment records
+- compliance documentation
+- audit evidence packages
+- supply-chain security archives
 
 > `receipt.pdf` is a generated workflow artifact, not a permanent public hosted report URL.
+
+---
+
+## Usage and Quota Note
+
+Each successful workflow run generates a new Proof-of-Publish receipt.
+
+Viewing an existing receipt, downloading an artifact bundle, opening a public verification URL, or inspecting previous workflow runs does **not** consume additional API usage.
+
+Only generating a new proof consumes usage from the configured `GI_API_KEY`.
+
+For public demos, use a dedicated demo or sandbox key. For customer testing, fork the demo repository and configure your own `GI_API_KEY` secret.
 
 ---
 
@@ -87,14 +99,13 @@ These files are intended to be preserved as **GitHub Actions artifacts** or stor
 2. Add a repository secret named `GI_API_KEY`.
 3. Create `.github/workflows/publish-receipt.yml`.
 4. Add `uses: GetIntegrityAPI/proof-of-publish@v1` to the workflow.
-5. Run the workflow manually or push a commit.
+5. Run the workflow manually or trigger it from your release process.
 6. Review the generated:
-
-   * `proof_id`
-   * `receipt_url`
-   * `receipt_sha256`
-   * `receipt.pdf`
-   * artifact bundle
+   - `proof_id`
+   - `receipt_url`
+   - `receipt_sha256`
+   - `receipt.pdf`
+   - artifact bundle
 
 This repository hosts the Action itself. Your normal production usage will usually happen in a separate consumer repository.
 
@@ -176,10 +187,10 @@ jobs:
 
 This gives every pipeline run:
 
-* a public verification surface
-* downloadable receipt artifacts
-* a machine-readable integrity record
-* an audit-friendly PDF receipt
+- a public verification surface
+- downloadable receipt artifacts
+- a machine-readable integrity record
+- an audit-friendly PDF receipt
 
 ---
 
@@ -189,13 +200,21 @@ A public demo consumer repository is available to show the standard onboarding a
 
 [`GetIntegrityAPI/proof-of-publish-demo`](https://github.com/GetIntegrityAPI/proof-of-publish-demo)
 
-It demonstrates:
+Latest successful demo proof:
 
-* installing `GetIntegrityAPI/proof-of-publish@v1`
-* storing `GI_API_KEY` in GitHub Actions secrets
-* generating a `proof_id`
-* opening the public `receipt_url`
-* downloading the workflow artifact bundle
+[View public verification receipt](https://api.getintegrityapi.com/verify/e3cf3286-3112-4e55-be05-647eea265182)
+
+The demo repository shows how a consumer repo can:
+
+- install `GetIntegrityAPI/proof-of-publish@v1`
+- store `GI_API_KEY` in GitHub Actions secrets
+- generate a `proof_id`
+- open the public `receipt_url`
+- download the workflow artifact bundle
+
+Viewing the demo receipt, downloading demo artifacts, or inspecting previous demo workflow runs does **not** generate a new proof or consume API usage.
+
+Running the demo workflow manually creates a new publish receipt and consumes one usage unit from the configured `GI_API_KEY`.
 
 This is the recommended reference model for customer onboarding, as distinct from this repository, which hosts the Action implementation itself.
 
@@ -251,9 +270,9 @@ This is the primary online verification surface for sharing and review.
 
 The generated files can be downloaded from the workflow run artifacts:
 
-* `receipt.json`
-* `receipt.sha256`
-* `receipt.pdf`
+- `receipt.json`
+- `receipt.sha256`
+- `receipt.pdf`
 
 This is the recommended way to retain evidence packages from CI/CD runs.
 
@@ -261,10 +280,10 @@ This is the recommended way to retain evidence packages from CI/CD runs.
 
 For offline integrity workflows:
 
-* preserve `receipt.json`
-* preserve `receipt.sha256`
-* verify the SHA-256 digest locally
-* verify the signed proof using the published public key material
+- preserve `receipt.json`
+- preserve `receipt.sha256`
+- verify the SHA-256 digest locally
+- verify the signed proof using the published public key material
 
 This supports independent verification workflows without relying solely on the UI.
 
@@ -304,15 +323,18 @@ with:
 
 Use a scoped key with the minimum permissions required for your release workflow.
 
+For public examples or demos, use a dedicated demo or sandbox key. Do not place API keys directly in workflow files, README files, screenshots, issues, or public logs.
+
 ---
 
 ## Security Notes
 
-* Use **scoped API keys**
-* Store secrets in **GitHub Actions Secrets**
-* Rotate keys periodically according to your CI/CD security policy
-* Preserve receipt artifacts with your release evidence where appropriate
-* Treat `receipt.json` and `receipt.sha256` as part of your integrity evidence package
+- Use **scoped API keys**
+- Store secrets in **GitHub Actions Secrets**
+- Rotate keys periodically according to your CI/CD security policy
+- Preserve receipt artifacts with your release evidence where appropriate
+- Treat `receipt.json` and `receipt.sha256` as part of your integrity evidence package
+- Do not expose `GI_API_KEY` in repository files, workflow logs, screenshots, or public documentation
 
 Generated receipts strengthen software supply-chain integrity by providing independent, cryptographically verifiable release evidence.
 
@@ -320,9 +342,9 @@ Generated receipts strengthen software supply-chain integrity by providing indep
 
 ## Documentation
 
-* [Developer Guide](https://getintegrityapi.com/#developer-guide)
-* [Interactive API Reference](https://api.getintegrityapi.com/docs)
-* [Proof Verification](https://getintegrityapi.com/#verify)
+- [Developer Guide](https://getintegrityapi.com/#developer-guide)
+- [Interactive API Reference](https://api.getintegrityapi.com/docs/)
+- [Proof Verification](https://getintegrityapi.com/#verify)
 
 ---
 
@@ -333,3 +355,4 @@ GetIntegrityAPI provides cryptographically verifiable event integrity infrastruc
 The platform enables developers and organizations to generate tamper-evident proofs for software releases, operational events, and system records without operating validator infrastructure.
 
 Learn more at [getintegrityapi.com](https://getintegrityapi.com).
+````
