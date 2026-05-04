@@ -4,7 +4,7 @@ description: "Generate cryptographically verifiable publish receipts for CI/CD r
 
 branding:
   icon: "shield"
-  color: "blue"
+  color: "green"
 
 inputs:
   api_key:
