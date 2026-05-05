@@ -1,6 +1,6 @@
 # GetIntegrityAPI Proof of Publish Action
 
-[![GitHub release](https://img.shields.io/github/v/release/GetIntegrityAPI/proof-of-publish?label=release)](https://github.com/GetIntegrityAPI/proof-of-publish/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/GetIntegrityAPI/proof-of-publish?label=release)](https://github.com/GetIntegrityAPI/proof-of-publish/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Proof%20of%20Publish-blue)](https://github.com/marketplace/actions/getintegrityapi-proof-of-publish)
 
